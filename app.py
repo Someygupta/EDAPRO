@@ -1,4 +1,5 @@
 import dash
+import os
 from dash import dcc, html, Input, Output, State, ctx, dash_table
 import dash_bootstrap_components as dbc
 import pandas as pd
@@ -155,19 +156,19 @@ def show_sheet_selector(contents, filename):
     Output('sql-upload-status', 'children'),
     Output('sql-data-store', 'data'),
     Input('load-sql', 'n_clicks'),
-    State('sql-host', 'value'),
-    State('sql-port', 'value'),
-    State('sql-user', 'value'),
-    State('sql-pass', 'value'),
-    State('sql-db', 'value'),
-    State('sql-query', 'value'),
     prevent_initial_call=True
 )
-def load_sql_data(n_clicks, host, port, user, pwd, db, query):
+def load_sql_data(n_clicks):
     try:
-        engine = create_engine(f"mysql+pymysql://{user}:{pwd}@{host}:{port}/{db}")
-        if not query.lower().strip().startswith("select"):
-            query = f"SELECT * FROM {query}"
+        # Railway auto environment variables
+        host = os.getenv("MYSQLHOST", "localhost")
+        port = os.getenv("MYSQLPORT", "3306")
+        user = os.getenv("MYSQLUSER", "root")
+        password = os.getenv("MYSQLPASSWORD", "")
+        database = os.getenv("MYSQLDATABASE", "")
+        
+        engine = create_engine(f"mysql+pymysql://{user}:{password}@{host}:{port}/{database}")
+        query = "SELECT * FROM your_table_name"  # 👈 Update this to your table
         df = pd.read_sql(query, con=engine)
         return f"✅ Loaded {len(df)} rows from MySQL.", df.to_json(date_format='iso', orient='split')
     except Exception as e:
