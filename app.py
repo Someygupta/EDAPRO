@@ -17,55 +17,41 @@ server = app.server
 def login_layout():
     return html.Div(
         style={
-            "backgroundImage": "url('/assets/background.jpg')",
-            "backgroundSize": "cover",
-            "backgroundPosition": "center",
-            "height": "100vh",
-            "display": "flex",
-            "alignItems": "center",
-            "justifyContent": "center",
-            "fontFamily": "'Poppins', sans-serif"
+            'backgroundImage': 'url("/assets/background.jpg")',
+            'backgroundSize': 'cover',
+            'backgroundPosition': 'center',
+            'height': '100vh',
+            'display': 'flex',
+            'justifyContent': 'center',
+            'alignItems': 'center',
+            'flexDirection': 'column'
         },
-        children=html.Div([
-            html.H2("🔐 Login to EDAPRO", className="text-center mb-4", style={
-                "color": "white",
-                "textShadow": "0 0 10px cyan"
-            }),
-
-            dbc.Input(id="username", placeholder="Username", type="text",
-                      className="mb-2", style={
-                          "width": "250px",
-                          "backgroundColor": "#222",
-                          "color": "white",
-                          "border": "1px solid #555",
-                          "boxShadow": "0 0 5px #00f8ff"
-                      }),
-
-            dbc.Input(id="password", placeholder="Password", type="password",
-                      className="mb-2", style={
-                          "width": "250px",
-                          "backgroundColor": "#222",
-                          "color": "white",
-                          "border": "1px solid #555",
-                          "boxShadow": "0 0 5px #00f8ff"
-                      }),
-
-            dbc.Button("Login", id="login-button", color="primary", className="mb-2", style={
-                "width": "250px",
-                "backgroundColor": "#00f8ff",
-                "color": "#000",
-                "fontWeight": "bold",
-                "boxShadow": "0 0 20px #00f8ff"
-            }),
-
-            html.Div(id="login-alert", className="text-danger mt-2 text-center")
-        ], style={
-            "backgroundColor": "rgba(0, 0, 0, 0.7)",
-            "padding": "40px",
-            "borderRadius": "15px",
-            "textAlign": "center",
-            "boxShadow": "0 0 30px cyan"
-        })
+        children=[
+            html.Div([
+                html.H2("🔐 Login to EDAPRO", style={
+                    'color': '#00ffff',
+                    'textAlign': 'center',
+                    'marginBottom': '20px',
+                    'textShadow': '0 0 10px #00ffff'
+                }),
+                dbc.Input(id="username", placeholder="Username", type="text", className="mb-2", style={
+                    "width": "250px", "margin": "auto"
+                }),
+                dbc.Input(id="password", placeholder="Password", type="password", className="mb-3", style={
+                    "width": "250px", "margin": "auto"
+                }),
+                dbc.Button("Login", id="login-button", color="info", style={
+                    "width": "250px", "margin": "auto", "fontWeight": "bold"
+                }),
+                html.Div(id="login-alert", className="text-danger mt-2", style={'textAlign': 'center'})
+            ], style={
+                'backgroundColor': 'rgba(0, 0, 0, 0.7)',
+                'padding': '40px',
+                'borderRadius': '20px',
+                'boxShadow': '0 0 15px cyan',
+                'textAlign': 'center'
+            })
+        ]
     )
 
 def dashboard_layout():
