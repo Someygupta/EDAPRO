@@ -160,16 +160,19 @@ def show_sheet_selector(contents, filename):
 )
 def load_sql_data(n_clicks):
     try:
-        # Railway auto environment variables
-        host = os.getenv("MYSQLHOST", "localhost")
+        host = os.getenv("MYSQLHOST")
         port = os.getenv("MYSQLPORT", "3306")
-        user = os.getenv("MYSQLUSER", "root")
-        password = os.getenv("MYSQLPASSWORD", "")
-        database = os.getenv("MYSQLDATABASE", "")
-        
-        engine = create_engine(f"mysql+pymysql://{user}:{password}@{host}:{port}/{database}")
-        query = "SELECT * FROM your_table_name"  # 👈 Update this to your table
+        user = os.getenv("MYSQLUSER")
+        password = os.getenv("MYSQLPASSWORD")
+        database = os.getenv("MYSQLDATABASE")
+
+        engine = create_engine(
+            f"mysql+pymysql://{user}:{password}@{host}:{port}/{database}"
+        )
+
+        query = "SELECT * FROM your_table_name"  # Replace with your actual table name
         df = pd.read_sql(query, con=engine)
+
         return f"✅ Loaded {len(df)} rows from MySQL.", df.to_json(date_format='iso', orient='split')
     except Exception as e:
         return f"❌ SQL Error: {str(e)}", None
