@@ -166,9 +166,9 @@ def load_sql_data(n_clicks):
         password = os.getenv("MYSQLPASSWORD")
         database = os.getenv("MYSQLDATABASE")
 
-        engine = create_engine(
-            f"mysql+pymysql://{user}:{password}@{host}:{port}/{database}"
-        )
+        db_url = os.getenv("DATABASE_URL")
+        engine = create_engine(db_url)
+        
 
         query = "SELECT * FROM your_table_name"  # Replace with your actual table name
         df = pd.read_sql(query, con=engine)
