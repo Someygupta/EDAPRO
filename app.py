@@ -1,5 +1,4 @@
 import dash
-import os
 from dash import dcc, html, Input, Output, State, ctx, dash_table
 import dash_bootstrap_components as dbc
 import pandas as pd
@@ -156,23 +155,20 @@ def show_sheet_selector(contents, filename):
     Output('sql-upload-status', 'children'),
     Output('sql-data-store', 'data'),
     Input('load-sql', 'n_clicks'),
+    State('sql-host', 'value'),
+    State('sql-port', 'value'),
+    State('sql-user', 'value'),
+    State('sql-pass', 'value'),
+    State('sql-db', 'value'),
+    State('sql-query', 'value'),
     prevent_initial_call=True
 )
-def load_sql_data(n_clicks):
+def load_sql_data(n_clicks, host, port, user, pwd, db, query):
     try:
-        host = os.getenv("MYSQLHOST")
-        port = os.getenv("MYSQLPORT", "3306")
-        user = os.getenv("MYSQLUSER")
-        password = os.getenv("MYSQLPASSWORD")
-        database = os.getenv("MYSQLDATABASE")
-
-        db_url = os.getenv("DATABASE_URL")
-        engine = create_engine(db_url)
-        
-
-        query = "SELECT * FROM your_table_name"  # Replace with your actual table name
+        engine = create_engine(f"mysql+pymysql://{user}:{pwd}@{host}:{port}/{db}")
+        if not query.lower().strip().startswith("select"):
+            query = f"SELECT * FROM {query}"
         df = pd.read_sql(query, con=engine)
-
         return f"✅ Loaded {len(df)} rows from MySQL.", df.to_json(date_format='iso', orient='split')
     except Exception as e:
         return f"❌ SQL Error: {str(e)}", None
