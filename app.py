@@ -132,7 +132,7 @@ def display_page(pathname):
 def login(n_clicks, user, pwd, current_path):
     if n_clicks is None or n_clicks == 0:
         raise dash.exceptions.PreventUpdate
-    if user == "admin" and pwd == "admin":
+    if user == "admin" and pwd == "admin@2025":
         return "/dashboard", ""
     return "/login", "❌ Invalid username or password."
 
